@@ -111,10 +111,10 @@ var Facade_engine = (function(THREE) {
 		},
 		DrawStroke: function( _options ) {
 			var ellipsePath = new THREE.CurvePath();
-			ellipsePath.add(new THREE.EllipseCurve(0, 0, _options.positionX, _options.positionY, 0, 2.0 * Math.PI, false));
+			ellipsePath.add(new THREE.EllipseCurve(_options.twodX, _options.twodY, _options.threedX, _options.threedY, 0, 2.0 * Math.PI, false));
 			var ellipseGeometry = ellipsePath.createPointsGeometry(100);
 			ellipseGeometry.computeTangents();
-			return new THREE.Line(ellipseGeometry, new THREE.LineBasicMaterial({color:0x444444, opacity:1}));
+			return new THREE.Line(ellipseGeometry, new THREE.LineBasicMaterial({color:_options.hex, opacity:1}));
 		}
 	};
 }(THREE));

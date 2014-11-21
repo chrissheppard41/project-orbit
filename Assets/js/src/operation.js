@@ -1,21 +1,14 @@
 var Operation = (function() {
 
-	var container,
-		stats;
-
-	var camera,
-		controls,
-		scene,
-		renderer;
-
 	var sun,
-		planets = [];
+		planets = [],
+		comets = [];
 
 	return {
 		init: function() {
 
 			//camera base
-			Facade_engine.Camera( { fov: 60, aspect: (window.innerWidth / window.innerHeight), near: 1, far: 1000, x:0, y:0, z:500 });
+			Facade_engine.Camera( { fov: 60, aspect: (window.innerWidth / window.innerHeight), near: 1, far: 2000, x:0, y:0, z:500 });
 
 			//camera controls
 			Facade_engine.Controls( { damping: 0.2, callback: this.render } );
@@ -48,24 +41,24 @@ var Operation = (function() {
 
 		},
 		setPlanets: function() {
-			sun = new Planet(30, 32, 0, 0, 0, null/*"Assets/img/texture_sun.jpg"*/, false, false);
+			sun = new Planet(30, 32, {x:0, y:0, z:0}, null/*"Assets/img/texture_sun.jpg"*/, false, false);
 			Facade_engine.SceneAdd( sun.getPlanet() );
 
-			var p1 = new Planet(1, 10, 50, 50, 0, null, true, true);
-			p1.addMoon(0.2, 5, 5, 5, 0, null);
-			p1.addMoon(0.3, 5, 7, 7, 0, null);
+			var p1 = new Planet(1, 10, {x:50, y:50, z:0}, null, true, true);
+			p1.addMoon(0.2, 5, {x:5,y:5,z:-3}, null, true);
+			p1.addMoon(0.3, 5, {x:7,y:7,z:8}, null, true);
 			planets.push(p1);
 
-			var p2 = new Planet(1, 10, 150, 150, 0, null, true, true);
+			var p2 = new Planet(1, 10, {x:150, y:150, z:0}, null, true, true);
 			planets.push(p2);
 
-			var p3 = new Planet(2, 10, 200, 200, 0, null, true, true);
+			var p3 = new Planet(2, 10, {x:200, y:200, z:-40}, null, true, true);
 			planets.push(p3);
 
-			var p4 = new Planet(5, 10, 230, 260, 30, null, true, true);
-			p4.addMoon(0.2, 5, 12, 12, 0, null);
-			p4.addMoon(0.3, 5, 7, 7, 0, null);
-			p4.addMoon(0.5, 5, 10, 10, 5, null);
+			var p4 = new Planet(5, 15, {x:230, y:260, z:30}, null, true, true);
+			p4.addMoon(0.2, 5, {x:15, y:15, z:0}, null);
+			p4.addMoon(0.3, 5, {x:10, y:10, z:0}, null);
+			p4.addMoon(0.5, 5, {x:13, y:13, z:5}, null);
 			planets.push(p4);
 
 			if(planets.length) {
@@ -86,6 +79,18 @@ var Operation = (function() {
 
 				}
 			}
+
+			var c1 = new Comet(0.82, 10, {x:100,y:0,z:0}, {x:200,y:40,z:200}, null, true, true);
+			comets.push(c1);
+
+			if(comets.length) {
+				for(var i = 0; i < comets.length; i++) {
+					Facade_engine.SceneAdd( comets[i].getComet() );
+					Facade_engine.SceneAdd( comets[i].getStroke() );
+				}
+			}
+
+
 		},
 		setLights: function() {
 			/*light = new Facade_engine.DirectionalLight( { 0xffffff, x: 0, y: 0, z: 0 } );
@@ -113,6 +118,11 @@ var Operation = (function() {
 			if(planets.length) {
 				for(var i = 0; i < planets.length; i++) {
 					planets[i].draw();
+				}
+			}
+			if(comets.length) {
+				for(var j = 0; j < comets.length; j++) {
+					comets[j].draw();
 				}
 			}
 

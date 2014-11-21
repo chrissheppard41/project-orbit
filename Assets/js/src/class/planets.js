@@ -2,12 +2,10 @@ var Planet = (function() {
 	var pl = null,
 		moons = [],
 		angle = 0,
-		distanceX = 0,
-		distanceY = 0,
-		distanceZ = 0,
+		distance = { x:0, y:0, z:0 },
 		stroke = 0;
 
-	function Planet(radius, segments, positionX, positionY, positionZ, texture, autoupdate, drawStroke) {
+	function Planet(radius, segments, position, texture, autoupdate, drawStroke) {
 		var geometry = Facade_engine.SphereGeo( { radius: radius, segments: segments } );
 		var mat = {  };
 		if(texture !== null) {
@@ -17,31 +15,28 @@ var Planet = (function() {
 		}
 		var material = Facade_engine.MeshMaterial( { mat: mat } );
 
-		this.pl = Facade_engine.Mesh( { geometry:geometry, material:material, x:positionX, y:positionY, z:positionZ, update:autoupdate } );
+		this.pl = Facade_engine.Mesh( { geometry:geometry, material:material, x:position.x, y:position.y, z:position.z, update:autoupdate } );
 
-		this.distanceX = positionX;
-		this.distanceY = positionY;
-		this.distanceZ = positionZ;
+		this.distance = position;
 
 		this.angle = 0;
 
 		if(drawStroke) {
-			this.stroke = Facade_engine.DrawStroke( { positionX:positionX, positionY:positionY } );
+			this.stroke = Facade_engine.DrawStroke( { twodX: 0, twodY: 0, threedX:position.x, threedY:position.y, hex: 0x444444 } );
 		}
 		this.moons = [];
-
 	}
 
 	Planet.prototype = {
 		draw: function() {
 			if(this.angle === 360) { this.angle = 0; }
-			var x1 = this.distanceX * Math.sin(this.angle * Math.PI / 180);
-			var y1 = this.distanceY * Math.cos(this.angle * Math.PI / 180);
-			var z1 = this.distanceZ * Math.sin(this.angle * Math.PI / 180);
+			var x1 = this.distance.x * Math.sin(this.angle * Math.PI / 180);
+			var y1 = this.distance.y * Math.cos(this.angle * Math.PI / 180);
+			var z1 = this.distance.z * Math.sin(this.angle * Math.PI / 180);
 
 			Facade_engine.MeshPosition( this.pl, x1, y1, z1 );
 
-			this.angle += (10/this.distanceX);
+			this.angle += (10/this.distance.x);
 
 			if(this.moons.length) {
 				for(var i = 0; i < this.moons.length; i++) {
@@ -53,9 +48,8 @@ var Planet = (function() {
 		getPlanet: function() {
 			return this.pl;
 		},
-		addMoon: function(_radius, _segments, _x, _y, _z, texture, drawStroke) {
-			var moon = new Moon(_radius, _segments, _x, _y, _z, null, true, false);
-
+		addMoon: function(_radius, _segments, _position, texture) {
+			var moon = new Moon(_radius, _segments, _position, null, true);
 			this.moons.push(moon);
 		},
 		getMoons: function() {
