@@ -34,156 +34,25 @@
 	<body>
 		<div id="container"></div>
 
-		<script src="Assets/js/libs/three.min.js"></script>
+		<script src="Assets/js/all.min.js"></script>
+
+		<script src="Assets/js/build.min.js"></script>
+
+		<!--script src="Assets/js/libs/three.min.js"></script>
 
 		<script src="Assets/js/libs/OrbitControls.js"></script>
 
 		<script src="Assets/js/libs/Detector.js"></script>
 		<script src="Assets/js/libs/stats.min.js"></script>
 
-
+		<script src="Assets/js/src/facade/facade_dom.js"></script>
+		<script src="Assets/js/src/facade/facade_engine.js"></script>
 
 		<script src="Assets/js/src/class/planets.js"></script>
 		<script src="Assets/js/src/class/moons.js"></script>
 
-		<script>
-
-			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
-			var container, stats;
-
-			var camera, controls, scene, renderer;
-
-			var sun, planets = [];
-
-			init();
-			//render();
-			var x = 0;
-			function animate() {
-
-				requestAnimationFrame(animate);
-				controls.update();
-
-				if(planets.length) {
-					for(var i = 0; i < planets.length; i++) {
-						planets[i].draw();
-					}
-				}
-
-				render();
-
-			}
-
-			function init() {
-
-				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-				camera.position.z = 500;
-
-				controls = new THREE.OrbitControls( camera );
-				controls.damping = 0.2;
-				controls.addEventListener( 'change', render );
-
-				scene = new THREE.Scene();
-				//scene.fog = new THREE.FogExp2( 0xcccccc, 0.002 );
-
-				// world
-				sun = new Planet(30, 32, 0, 0, 0, null/*"Assets/img/texture_sun.jpg"*/, false, false);
-				scene.add( sun.getPlanet() );
-
-				var p1 = new Planet(1, 10, 50, 50, 0, null, true, true);
-				p1.addMoon(0.2, 5, 5, 5, 0, null);
-				p1.addMoon(0.3, 5, 7, 7, 0, null);
-				planets.push(p1);
-
-				var p2 = new Planet(1, 10, 150, 150, 0, null, true, true);
-				planets.push(p2);
-
-				var p3 = new Planet(2, 10, 200, 200, 0, null, true, true);
-				planets.push(p3);
-
-				var p4 = new Planet(5, 10, 230, 260, 30, null, true, true);
-				p4.addMoon(0.2, 5, 12, 12, 0, null);
-				p4.addMoon(0.3, 5, 7, 7, 0, null);
-				p4.addMoon(0.5, 5, 10, 10, 5, null);
-				planets.push(p4);
-
-				if(planets.length) {
-					for(var i = 0; i < planets.length; i++) {
-						scene.add( planets[i].getPlanet() );
-						scene.add( planets[i].getStroke() );
-
-						var moons = planets[i].getMoons();
-						if(moons.length) {
-							for(var j = 0; j < moons.length; j++) {
-								scene.add( moons[j].getMoon() );
-							}
-						}
-
-					}
-				}
-
-				// lights
-
-				/*light = new THREE.DirectionalLight( 0xffffff );
-				light.position.set( 1, 0, 0 );
-				scene.add( light );*/
-
-				light = new THREE.PointLight( 0xffffff, 1, 1000 );
-				light.position.set( 0, 0, 0 );
-				scene.add( light );
-
-				/*light = new THREE.DirectionalLight( 0x002288 );
-				light.position.set( -1, -1, -1 );
-				scene.add( light );*/
-
-				light = new THREE.AmbientLight( 0xaaaaaa );
-				scene.add( light );
-
-
-
-				// renderer
-
-				renderer = new THREE.WebGLRenderer( { antialias: false } );
-				//renderer.setClearColor( scene.fog.color, 1 );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-				container = document.getElementById( 'container' );
-				container.appendChild( renderer.domElement );
-
-				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				stats.domElement.style.zIndex = 100;
-				container.appendChild( stats.domElement );
-
-				//
-
-				window.addEventListener( 'resize', onWindowResize, false );
-
-				animate();
-
-			}
-
-			function onWindowResize() {
-
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-				render();
-
-			}
-
-			function render() {
-
-				renderer.render( scene, camera );
-				stats.update();
-
-			}
-
-
-		</script>
+		<script src="Assets/js/src/operation.js"></script>
+		<script src="Assets/js/src/init.js"></script-->
 
 	</body>
 </html>

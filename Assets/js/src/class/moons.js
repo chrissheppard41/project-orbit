@@ -6,21 +6,16 @@ var Moon = (function() {
 		distanceZ = 0;
 
 	function Moon(radius, segments, positionX, positionY, positionZ, texture, autoupdate) {
-		var geometry = new THREE.SphereGeometry( radius, segments, segments );
+		var geometry = Facade_engine.SphereGeo( { radius: radius, segments: segments } );
 		var mat = {  };
 		if(texture !== null) {
-			mat = { map: THREE.ImageUtils.loadTexture(texture) };
+			mat = { map: Facade_engine.MeshTexture(texture) };
 		} else {
-			mat ={ color:0xffffff, shading: THREE.FlatShading };
+			mat = { color:0xffffff, shading: Facade_engine.FlatShading() };
 		}
-		var material = new THREE.MeshLambertMaterial( mat );
+		var material = Facade_engine.MeshMaterial( { mat: mat } );
 
-		this.mn = new THREE.Mesh( geometry, material );
-		this.mn.position.x = positionX;
-		this.mn.position.y = positionY;
-		this.mn.position.z = positionZ;
-		this.mn.updateMatrix();
-		this.mn.matrixAutoUpdate = autoupdate;
+		this.mn = Facade_engine.Mesh( { geometry:geometry, material:material, x:positionX, y:positionY, z:positionZ, update:autoupdate } );
 
 		this.distanceX = positionX;
 		this.distanceY = positionY;
@@ -36,9 +31,7 @@ var Moon = (function() {
 			var y1 = _py + this.distanceY * Math.cos(this.angle * Math.PI / 180);
 			var z1 = _pz + this.distanceZ * Math.sin(this.angle * Math.PI / 180);
 
-			this.mn.position.x = x1;
-			this.mn.position.y = y1;
-			this.mn.position.z = z1;
+			Facade_engine.MeshPosition( this.mn, x1, y1, z1 );
 
 			this.angle += (10/this.distanceX);
 		},
